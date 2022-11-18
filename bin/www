@@ -7,6 +7,8 @@
 const app = require('../app')
 const debug = require('debug')('app:server')
 const http = require('http')
+const CONFIG = require('../utils/config')
+const { connectDb } = require('../utils/db.config')
 
 /**
  * Get port from environment and store in Express.
@@ -79,7 +81,8 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 
-function onListening() {
+async function onListening() {
+  await connectDb(CONFIG.DBURI)
   const addr = server.address()
   const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port
   debug('Listening on ' + bind)
